@@ -12,12 +12,12 @@ public class MarmotRpcBean {
 	
 	private Object[] parameters;
 	
-	private Object[] parameterTypes;
+	private Class<?>[] parameterTypes;
 
-	public MarmotRpcBean(Object target, Method method) {
-		super();
+	public MarmotRpcBean(Object target, Method method,Class<?>[] paramterTypes) {
 		this.target = target;
 		this.method = method;
+		this.parameterTypes = paramterTypes;
 	}
 
 	public Object getTarget() {
@@ -44,13 +44,16 @@ public class MarmotRpcBean {
 		this.parameters = parameters;
 	}
 
-	public Object[] getParameterTypes() {
+	public Class<?>[] getParameterTypes() {
 		return parameterTypes;
 	}
 
-	public void setParameterTypes(Object[] parameterTypes) {
+	public void setParameterTypes(Class<?>[] parameterTypes) {
 		this.parameterTypes = parameterTypes;
 	}
+
+
+	
 	
 
 	

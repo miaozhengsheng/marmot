@@ -64,9 +64,11 @@ public class RPCUtil {
 					subPath = annotationMethod.url();
 				}
 				
+				Class<?>[] parameterTypes = method.getParameterTypes();
+				
 				Object target = SpringContextUtil.getBean(beanName);
 				
-				MarmotRpcBean rpcBean = new MarmotRpcBean(target, method);
+				MarmotRpcBean rpcBean = new MarmotRpcBean(target, method,parameterTypes);
 				
 				RPC_MAPPER.put("/"+basePath+"/"+subPath+"/", rpcBean);
 

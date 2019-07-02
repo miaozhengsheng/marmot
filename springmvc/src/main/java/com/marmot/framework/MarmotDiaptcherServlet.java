@@ -25,8 +25,6 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 		
 		boolean isRpc = isRpcRequest(uri);
 		if(isRpc){
-			System.out.println("这是RPC请求，单独处理");
-			
 			
 			String tmp = uri.replace("/RPC","");
 			if(!tmp.endsWith("/")){
