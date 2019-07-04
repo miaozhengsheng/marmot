@@ -11,6 +11,8 @@ public class RequestUtil {
 	
 	public static final String DATA="data";
 	
+	public static final String OUT_PUT = "output";
+	
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getInputParameter(HttpServletRequest request){
 		return (Map<String, Object>) request.getAttribute(INPUT);

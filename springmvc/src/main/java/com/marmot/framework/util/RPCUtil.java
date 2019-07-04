@@ -3,6 +3,7 @@ package com.marmot.framework.util;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -14,6 +15,10 @@ import com.marmot.common.rpc.scanner.RpcScanner;
 public class RPCUtil {
 	
 	public static final ConcurrentHashMap<String, MarmotRpcBean> RPC_MAPPER = new ConcurrentHashMap<String, MarmotRpcBean>();
+	
+	// 解析方法中的名称
+	private static final LocalVariableTableParameterNameDiscoverer classPathDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+	  
 	
 	
 	public static void initRpcMapper() throws Exception{
@@ -67,14 +72,23 @@ public class RPCUtil {
 				Class<?>[] parameterTypes = method.getParameterTypes();
 				
 				Object target = SpringContextUtil.getBean(beanName);
+				// 得到参数名称
+				Method classMthod = target.getClass().getMethod(method.getName(), parameterTypes);
 				
-				MarmotRpcBean rpcBean = new MarmotRpcBean(target, method,parameterTypes);
+				String[] parameterNames = genMethodParameterName(classMthod);
+				
+				MarmotRpcBean rpcBean = new MarmotRpcBean(target, method,parameterTypes,parameterNames);
 				
 				RPC_MAPPER.put("/"+basePath+"/"+subPath+"/", rpcBean);
 
 			}
 
 		}
+	}
+	
+	private static String[] genMethodParameterName(Method method){
+		String[] parameterNames = classPathDiscoverer.getParameterNames(method);
+		return parameterNames;
 	}
 	
 	private static String genBeanName(String clazzName){

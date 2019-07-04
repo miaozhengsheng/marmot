@@ -7,6 +7,8 @@ import com.marmot.common.rpc.annotation.MarmotMethod;
 public interface IMarmotDemoService {
 	
 	@MarmotMethod
-	public String hello()throws Exception;
+	public String hello(String name)throws Exception;
+	@MarmotMethod
+	public Integer add(Integer a,Integer b) throws Exception;
 
 }
