@@ -1,7 +1,6 @@
 package com.marmot.framework;
 
 
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,13 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.google.common.collect.Maps;
 import com.marmot.common.rpc.bean.MarmotRpcBean;
 import com.marmot.common.util.JsonUtil;
 import com.marmot.framework.remote.RemoteCallDealer;
 import com.marmot.framework.remote.RequestOutput;
 import com.marmot.framework.util.RPCUtil;
-import com.marmot.framework.util.prameter.RequestUtil;
 
 public class MarmotDiaptcherServlet extends DispatcherServlet{
 
