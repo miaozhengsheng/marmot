@@ -12,9 +12,7 @@ public class HystrixCommandCallWrapper extends HystrixCommand<Object> {
     protected Object[] args;
 
     public HystrixCommandCallWrapper(Method method, Object[] args) {
-        super(HystrixConfigurationCurator.getInstance().getClientHystrixCommandSetter(
-                serviceMetadata.getProjectName(), serviceMetadata.getHystrixCommandKey(method, args),
-                serviceMetadata.isTimeout(method)));
+        super(null,null);
         this.method = method;
         this.args = args;
     }
