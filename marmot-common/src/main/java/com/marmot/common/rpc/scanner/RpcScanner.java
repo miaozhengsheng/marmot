@@ -25,8 +25,6 @@ public class RpcScanner {
 	public static void scanPackage(String packagePattern){
 	
 		initClass(packagePattern);
-		
-		
 	}
 	
 	

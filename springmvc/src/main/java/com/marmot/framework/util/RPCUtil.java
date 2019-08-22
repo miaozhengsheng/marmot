@@ -14,6 +14,8 @@ import com.marmot.common.rpc.scanner.RpcScanner;
 
 public class RPCUtil {
 	
+	
+	// 项目提供的RPC服务
 	public static final ConcurrentHashMap<String, MarmotRpcBean> RPC_MAPPER = new ConcurrentHashMap<String, MarmotRpcBean>();
 	
 	// 解析方法中的名称
