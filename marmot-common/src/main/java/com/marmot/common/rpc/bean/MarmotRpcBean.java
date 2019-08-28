@@ -1,6 +1,7 @@
 package com.marmot.common.rpc.bean;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 
 public class MarmotRpcBean {
@@ -53,9 +54,12 @@ public class MarmotRpcBean {
 		this.parameterTypes = parameterTypes;
 	}
 
-
-	
-	
+	@Override
+	public String toString() {
+		return "MarmotRpcBean [target=" + target + ", method=" + method
+				+ ", parameterNames=" + Arrays.toString(parameterNames)
+				+ ", parameterTypes=" + Arrays.toString(parameterTypes) + "]";
+	}
 
 	
 }
