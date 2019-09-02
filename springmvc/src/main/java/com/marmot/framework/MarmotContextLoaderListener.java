@@ -30,7 +30,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		}
 		// 如果项目提供了RPC服务 需要将项目注册到ZK上
 		IZKClient client = ZKUtil.getZkClient();
-		client.createNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("test"));
+		client.createNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project"));
 		// 在端口上启用NIO服务
 		try {
 			NioServer.startServer(7777);

@@ -35,13 +35,21 @@ public class NioServer {
 		serverSocketChannel.configureBlocking(false);
 		
 		InetSocketAddress inetSocketAddress = new InetSocketAddress(port);
-		serverSocketChannel.bind(inetSocketAddress);
+		serverSocketChannel.socket().bind(inetSocketAddress);
 		
-		serverSocketChannel.register(selector, SelectionKey.OP_CONNECT);
+		serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+		
 		
 		System.out.println("服务启动成功，开始接受RPC请求");
 		
-		acceptRequest();
+		
+		new Thread(()->{
+			try {
+				acceptRequest();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}).start();
 		
 	}
 	

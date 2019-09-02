@@ -15,7 +15,7 @@ import org.springframework.util.ClassUtils;
 public class RpcScanner {
 
 	
-	// 所有的rpc的接口生命类
+	// 所有的rpc的接口类
 	public static List<Class<?>> allRpcInterfaces = new ArrayList<Class<?>>();
 	
 	private static PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
