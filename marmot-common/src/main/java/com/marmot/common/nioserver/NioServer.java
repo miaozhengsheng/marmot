@@ -88,17 +88,16 @@ public class NioServer {
 				iterator.remove();
 				
 				if(!next.isValid()){
-					System.out.println("介绍的key已失效，需等待:"+next);
+					System.out.println("接受的key已失效，需等待:"+next);
 				}
 				
 				
 				if(next.isAcceptable()){
-					System.out.println("接收到请求信息");
 					handleAccept(next);
 				}
 				
+				
 				if(next.isReadable()){
-					System.out.println("读取请求信息");
 					handleRead(next);
 				}
 				if(next.isWritable()){
@@ -128,6 +127,10 @@ public class NioServer {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 		socketChannel.read(byteBuffer);
 		byteBuffer.flip();
+		
+		if(byteBuffer.limit()<=0){
+			return;
+		}
 		
 		byte[] copyOf = Arrays.copyOf(byteBuffer.array(),byteBuffer.capacity());
 		
