@@ -1,65 +1,87 @@
 package com.marmot.common.rpc.bean;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 
-public class MarmotRpcBean {
+public class MarmotRpcBean implements Serializable{
 	
 	
-	private Object target;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
-	private Method method;
+	private String methodName;
 	
-	private String[] parameterNames;
+	private String clazzName;
 	
-	private Class<?>[] parameterTypes;
+	private Object[] paramterValues; 
+	
+	private Class[] parameterTypes;
 
-	public MarmotRpcBean(Object target, Method method,Class<?>[] paramterTypes,String[] parameterNames) {
-		this.target = target;
-		this.method = method;
-		this.parameterTypes = paramterTypes;
-		this.parameterNames = parameterNames;
+	public MarmotRpcBean(Object target, String methodName,String clazzName,Object[] paramterValues,Class[] parameterTypes) {
+		this.methodName = methodName;
+		this.paramterValues = paramterValues;
+		this.clazzName = clazzName;
+		this.parameterTypes = parameterTypes;
 	}
 
-	public Object getTarget() {
-		return target;
-	}
 
-	public void setTarget(Object target) {
-		this.target = target;
-	}
-
-	public Method getMethod() {
-		return method;
-	}
-
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-
-	public String[] getParameterNames() {
-		return parameterNames;
-	}
-
-	public void setParameterNames(String[] parameterNames) {
-		this.parameterNames = parameterNames;
-	}
-
-	public Class<?>[] getParameterTypes() {
+	
+	public Class[] getParameterTypes() {
 		return parameterTypes;
 	}
 
-	public void setParameterTypes(Class<?>[] parameterTypes) {
+
+
+	public void setParameterTypes(Class[] parameterTypes) {
 		this.parameterTypes = parameterTypes;
+	}
+
+
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+
+
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+
+
+	public String getClazzName() {
+		return clazzName;
+	}
+
+
+
+	public void setClazzName(String clazzName) {
+		this.clazzName = clazzName;
+	}
+
+
+
+	public Object[] getParamterValues() {
+		return paramterValues;
+	}
+
+	public void setParamterValues(Object[] paramterValues) {
+		this.paramterValues = paramterValues;
 	}
 
 	@Override
 	public String toString() {
-		return "MarmotRpcBean [target=" + target + ", method=" + method
-				+ ", parameterNames=" + Arrays.toString(parameterNames)
-				+ ", parameterTypes=" + Arrays.toString(parameterTypes) + "]";
+		return "MarmotRpcBean [methodName=" + methodName + ", paramterValues="
+				+ Arrays.toString(paramterValues) + "]";
 	}
+	
 
 	
 }

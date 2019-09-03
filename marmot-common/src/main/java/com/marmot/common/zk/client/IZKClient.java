@@ -1,5 +1,7 @@
 package com.marmot.common.zk.client;
 
+import java.util.List;
+
 import org.apache.zookeeper.data.Stat;
 
 import com.marmot.common.zk.EnumZKNameSpace;
@@ -38,6 +40,13 @@ public interface IZKClient {
 	 * @return
 	 */
 	public boolean deleteTempNode(EnumZKNameSpace namespace, String path);
+	/**
+	 * 删除普通节点
+	 * @param namespace
+	 * @param path
+	 * @return
+	 */
+	public boolean deleteNormalNode(EnumZKNameSpace namespace, String path);
 
 	/**
 	 * 得到节点的状态
@@ -45,5 +54,13 @@ public interface IZKClient {
 	 * @return
 	 */
 	public Stat getStat(String fullPath);
+	
+	/**
+	 * @param nameSpace
+	 * @param path
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<String> listSubNodes(EnumZKNameSpace nameSpace,String path) throws Exception;
 
 }

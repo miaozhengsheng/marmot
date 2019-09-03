@@ -1,5 +1,6 @@
 package com.marmot.common.zk.client.impl;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -283,6 +284,28 @@ public class ZKClientImpl implements IZKClient {
 		}
 		connectStatus.compareAndSet(false, true);
 		return true;
+	}
+
+	@Override
+	public boolean deleteNormalNode(EnumZKNameSpace namespace, String path) {
+		
+		String fullPath = ZKUtil.joinPath(namespace, path);
+		// 验证节点名字合法性及验证节点层级数和节点最大长度（不能超过设置的最大层级数）
+		// PathUtil.checkNodePath(fullPath);
+		// 检查zk连接可用
+		if (!connectStatus.get()) {
+			logger.warn("ZooKeeper client connect invalid.");
+			return false;
+		}
+
+		return deleteNode(fullPath);
+	}
+
+	@Override
+	public List<String> listSubNodes(EnumZKNameSpace nameSpace, String path) throws Exception {
+		String fullPath = ZKUtil.joinPath(nameSpace, path);
+		List<String> forPath = client.getChildren().forPath(fullPath);
+		return forPath;
 	}
 
 }

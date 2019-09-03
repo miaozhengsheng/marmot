@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.marmot.common.rpc.bean.MarmotRpcBean;
+import com.marmot.framework.SpringContextUtil;
 
 
 public class NioServer {
@@ -67,7 +69,7 @@ public class NioServer {
 		}
 	}
 	
-	private static void acceptRequest() throws IOException, ClassNotFoundException{
+	private static void acceptRequest() throws Exception{
 		
 		while(true){
 		
@@ -83,14 +85,24 @@ public class NioServer {
 				
 				SelectionKey next = iterator.next();
 				
+				iterator.remove();
+				
+				if(!next.isValid()){
+					System.out.println("介绍的key已失效，需等待:"+next);
+				}
+				
+				
 				if(next.isAcceptable()){
+					System.out.println("接收到请求信息");
 					handleAccept(next);
 				}
 				
 				if(next.isReadable()){
+					System.out.println("读取请求信息");
 					handleRead(next);
 				}
 				if(next.isWritable()){
+					System.out.println("处理请求结果");
 					handleWrite(next);
 				}
 				
@@ -101,16 +113,15 @@ public class NioServer {
 	
 	private static void handleAccept(SelectionKey key) throws IOException{
 		
-		ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
 		
-		SocketChannel accept = serverSocketChannel.accept();
-		
-		accept.configureBlocking(false);
-		
-		accept.register(selector, SelectionKey.OP_READ,new ArrayList<Object>());
+		System.out.println("服务端，收到接入的key："+key);
+		SocketChannel socketChannel = ((ServerSocketChannel)key.channel()).accept();
+		socketChannel.configureBlocking(false);
+		// 注册读取事件
+		socketChannel.register(selector,SelectionKey.OP_READ);
 	}
 	
-	private static void handleRead(SelectionKey key) throws IOException, ClassNotFoundException{
+	private static void handleRead(SelectionKey key) throws Exception{
 		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		
@@ -128,9 +139,25 @@ public class NioServer {
 		
 		// 真正调用本地方法的地方
 		
-		key.attach(rpcBean);
+		String methodName = rpcBean.getMethodName();
+		String clazzName = rpcBean.getClazzName();
 		
-		socketChannel.register(selector, SelectionKey.OP_WRITE);
+		Class clazz = Class.forName(clazzName);
+		
+		Method method = clazz.getMethod(methodName, rpcBean.getParameterTypes());
+		
+		Object target = SpringContextUtil.getBean(clazz);
+		
+		if(target==null){
+			throw new Exception("接口不存在");
+		}
+		
+		Object result = method.invoke(target, rpcBean.getParamterValues());
+		
+		
+		System.out.println("处理后的结果为:"+result);
+		
+		socketChannel.register(selector, SelectionKey.OP_WRITE,result);
 	}
 	
 
@@ -144,6 +171,8 @@ public class NioServer {
 		
 		  ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
           ObjectOutputStream oos = new ObjectOutputStream(byteOutputStream);
+          
+          System.out.println("开始向客户端输出结果:"+key.attachment());
           
            oos.writeObject(key.attachment());
           
