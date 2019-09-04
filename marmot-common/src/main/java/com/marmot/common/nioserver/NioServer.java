@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.marmot.common.framework.SpringContextUtil;
 import com.marmot.common.rpc.bean.MarmotRpcBean;
-import com.marmot.framework.SpringContextUtil;
 
 
 public class NioServer {
@@ -120,6 +120,8 @@ public class NioServer {
 		socketChannel.configureBlocking(false);
 		// 注册读取事件
 		socketChannel.register(selector,SelectionKey.OP_READ);
+		
+		
 	}
 	
 	private static void handleRead(SelectionKey key) throws Exception{
@@ -140,7 +142,6 @@ public class NioServer {
 		
 		MarmotRpcBean rpcBean = (MarmotRpcBean)objectInputStream.readObject();
 		
-		System.out.println("接收到的请求信息为："+rpcBean);
 		
 		// 真正调用本地方法的地方
 		

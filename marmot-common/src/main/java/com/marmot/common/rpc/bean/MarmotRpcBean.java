@@ -1,7 +1,6 @@
 package com.marmot.common.rpc.bean;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 
@@ -22,7 +21,7 @@ public class MarmotRpcBean implements Serializable{
 	
 	private Class[] parameterTypes;
 
-	public MarmotRpcBean(Object target, String methodName,String clazzName,Object[] paramterValues,Class[] parameterTypes) {
+	public MarmotRpcBean(String methodName,String clazzName,Object[] paramterValues,Class[] parameterTypes) {
 		this.methodName = methodName;
 		this.paramterValues = paramterValues;
 		this.clazzName = clazzName;
