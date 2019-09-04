@@ -57,6 +57,8 @@ public class NioServer {
 	
 	
 	public static void stopServer(){
+		
+		System.out.println("开始停止服务。。。");
 		try {
 			selector.close();
 		} catch (IOException e) {
@@ -147,8 +149,10 @@ public class NioServer {
 		
 		Class clazz = Class.forName(clazzName);
 		
+		@SuppressWarnings("unchecked")
 		Method method = clazz.getMethod(methodName, rpcBean.getParameterTypes());
 		
+		@SuppressWarnings("unchecked")
 		Object target = SpringContextUtil.getBean(clazz);
 		
 		if(target==null){

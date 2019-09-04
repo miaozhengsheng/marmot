@@ -12,8 +12,10 @@ public class Test {
     	
     	IMarmotDemoService proxy = RpcCallProxy.getProxy(IMarmotDemoService.class);
     	
-    	Integer result = proxy.add(1, 2);
-    	
-    	System.out.println(result);
+    	for(int i=0;i<20;i++){
+	    	Integer result = proxy.add(1, 2);
+	    	
+	    	System.out.println(result);
+    	}
     }
 }

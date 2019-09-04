@@ -36,7 +36,11 @@ public class RpcScanner {
                     + resourcePath);
             
             for(Resource resource:resources){
+            	
+            	
             	MetadataReader metadataReader = readerFactory.getMetadataReader(resource);
+            	
+            	System.out.println("当前扫描的文件为:"+resource.getFile().getAbsolutePath());
             	
             	String clazzName= metadataReader.getClassMetadata().getClassName();
             	

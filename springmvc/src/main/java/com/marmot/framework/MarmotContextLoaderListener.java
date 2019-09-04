@@ -38,6 +38,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 	public void contextDestroyed(ServletContextEvent event) {
 		super.contextDestroyed(event);
 
+		NioServer.stopServer();
 	}
 
 }
