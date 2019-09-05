@@ -34,7 +34,6 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 		
 	    // 将当前的IP注册到ZK服务器上
 		String ip = SystemUtil.getLocalIp();
-		int port  = SystemUtil.getConnectorPort();
 		ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project/"+ip+":7777"));
 	}
 
@@ -46,23 +45,5 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 		ZKUtil.getZkClient().deleteNormalNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project"));
 	}
 
-	/**
-	 * 是否是RPC请求
-	 * @param url
-	 * @return
-	 */
-	private boolean isRpcRequest(String url){
-		
-		if(StringUtils.isEmpty(url)){
-			return false;
-		}
-		
-		if(url.startsWith("/RPC")){
-			return true;
-		}
-		
-		return false;
-	}
-	
 
 }
