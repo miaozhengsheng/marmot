@@ -8,9 +8,6 @@
 	<name>springmvc Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<spring.version>3.2.18.RELEASE</spring.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
