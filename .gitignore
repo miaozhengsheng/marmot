@@ -1,1 +1,2 @@
-/marmot-common/
+*.class
+**/target
