@@ -89,6 +89,9 @@ public class NioRemoteCallProcessor {
 						return result;
 					} catch (Exception e) {
 						e.printStackTrace();
+					}finally{
+						selector.close();
+						socketChannel.close();
 					}
 				}
 
@@ -152,6 +155,7 @@ public class NioRemoteCallProcessor {
 		}
 
 		try {
+			socketChannel.configureBlocking(false);
 			socketChannel.finishConnect();
 			socketChannel.register(selector, SelectionKey.OP_WRITE);
 		} catch (IOException e) {
