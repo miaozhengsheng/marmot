@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.marmot.common.system.SystemUtil;
+import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
@@ -34,7 +35,7 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 		
 	    // 将当前的IP注册到ZK服务器上
 		String ip = SystemUtil.getLocalIp();
-		ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project/"+ip+":7777"));
+		ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":7777"));
 	}
 
 	@Override

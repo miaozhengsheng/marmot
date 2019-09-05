@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
 
+import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
@@ -17,7 +18,7 @@ public class RpcCallHandler implements InvocationHandler{
 			throws Throwable {
 		
 		// 获取方法所在的工程的名称
-		String projectName = "base-project";
+		String projectName = PropUtil.getInstance().get("project-name");
 
 		// 查询zk上该项目注册的服务
 		

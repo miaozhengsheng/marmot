@@ -1,4 +1,4 @@
-package com.liepin.eadc.erp.demo.springmvc.demo;
+package com.marmot.framework;
 
 
 import com.marmot.common.proxy.RpcCallProxy;

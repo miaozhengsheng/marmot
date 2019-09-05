@@ -8,6 +8,7 @@ import org.springframework.web.context.ContextLoaderListener;
 
 import com.marmot.common.nioserver.NioServer;
 import com.marmot.common.rpc.scanner.RpcScanner;
+import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
@@ -23,7 +24,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		// 如果项目提供了RPC服务 需要将项目注册到ZK上
 		IZKClient client = ZKUtil.getZkClient();
 		client.createNode(EnumZKNameSpace.PUBLIC,
-				ZKConstants.getProjectRpcNode("base-project"));
+				ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")));
 		// 在端口上启用NIO服务
 		try {
 			NioServer.startServer(7777);
