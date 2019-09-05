@@ -91,6 +91,7 @@ public class NioServer {
 				
 				if(!next.isValid()){
 					System.out.println("接受的key已失效，需等待:"+next);
+					continue;
 				}
 				
 				
@@ -127,6 +128,7 @@ public class NioServer {
 	private static void handleRead(SelectionKey key) throws Exception{
 		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
+		
 		
 		ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 		socketChannel.read(byteBuffer);
