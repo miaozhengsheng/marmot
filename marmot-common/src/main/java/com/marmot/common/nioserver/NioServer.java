@@ -129,7 +129,6 @@ public class NioServer {
 		
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		
-		
 		ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 		socketChannel.read(byteBuffer);
 		byteBuffer.flip();
