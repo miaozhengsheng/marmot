@@ -44,27 +44,5 @@ public class AppTest
         assertTrue( true );
     }
     
-    public static void main(String[] args) throws Exception {
-    	// 获取方法所在的工程的名称
-    			String projectName = "base-project";
-
-    			// 查询zk上该项目注册的服务
-    			
-    			List<String> listSubNodes = ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(projectName));
-    			
-    			if(listSubNodes==null||listSubNodes.isEmpty()){
-    				throw new Exception("无可用的节点");
-    			}
-    			
-    			int nextInt = RandomUtils.nextInt(listSubNodes.size());
-    			
-    			String targetAddr = listSubNodes.get(nextInt);
-    			
-    			String[] split = targetAddr.split(":");
-    			
-    			String ip = split[0];
-    			int port = Integer.parseInt(split[1]);
-    			
-    			System.out.println("注册的服务的IP为："+ip+" 端口为:"+port);
-	}
+    
 }

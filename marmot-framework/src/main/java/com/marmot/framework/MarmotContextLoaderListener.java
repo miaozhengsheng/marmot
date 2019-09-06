@@ -15,7 +15,6 @@ import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
-import com.marmot.common.zk.client.IZKClient;
 
 public class MarmotContextLoaderListener extends ContextLoaderListener {
 

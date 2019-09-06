@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.marmot.common.rpc.scanner.RpcClientFinder;
-import com.marmot.common.system.SystemUtil;
-import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
