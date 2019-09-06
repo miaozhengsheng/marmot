@@ -2,7 +2,7 @@ package com.marmot.framework;
 
 
 import com.marmot.common.proxy.RpcCallProxy;
-import com.marmot.demo.service.IMarmotDemoService;
+import com.marmot.demo.api.IMarmotDemoService;
 
 
 public class Test {
