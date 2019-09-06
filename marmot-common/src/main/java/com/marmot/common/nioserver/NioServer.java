@@ -153,12 +153,10 @@ public class NioServer {
 		String methodName = rpcBean.getMethodName();
 		String clazzName = rpcBean.getClazzName();
 		
-		Class clazz = Class.forName(clazzName);
+		Class<?> clazz = Class.forName(clazzName);
 		
-		@SuppressWarnings("unchecked")
 		Method method = clazz.getMethod(methodName, rpcBean.getParameterTypes());
 		
-		@SuppressWarnings("unchecked")
 		Object target = SpringContextUtil.getBean(clazz);
 		
 		if(target==null){
