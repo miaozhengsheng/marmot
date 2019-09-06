@@ -187,17 +187,14 @@ public class ZKClientImpl implements IZKClient {
 			String[] nodes = fullPath.replaceFirst(pathAndNode.getPath(), "")
 					.split("/");
 			String parentPath = ZKUtil.removeLastSlash(pathAndNode.getPath());
-			int index = 0;
 			for (String node : nodes) {
 				if (StringUtils.isEmpty(node)) {
-					index++;
 					continue;
 				}
 				String sonPath = parentPath + "/" + node;
 				client.create().creatingParentsIfNeeded().withMode(mode)
 						.forPath(sonPath, "{}".getBytes());
 				parentPath = sonPath;
-				index++;
 			}
 
 			result = true;
