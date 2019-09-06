@@ -20,18 +20,18 @@ public class RpcClientFinder {
 	private static final RpcClientFinder instance = new RpcClientFinder();
 	
 	// 提供的服务
-	private static final List<Class> INTERFACECLASS = new ArrayList<Class>();
+	private static final List<Class<?>> INTERFACECLASS = new ArrayList<Class<?>>();
 	private static final List<File> INTERFACECLASS_JARFILE = new ArrayList<File>();
 	// 需要调用的服务
-	public static final List<Class> SERVERINTERFACES = new ArrayList<Class>();
+	public static final List<Class<?>> SERVERINTERFACES = new ArrayList<Class<?>>();
 	private static final List<File> SERVERINTERFACES_JARFILE = new ArrayList<File>();
 	
 	
-	public static List<Class> getLocalServiceClass(){
+	public static List<Class<?>> getLocalServiceClass(){
 		return INTERFACECLASS;
 	}
 	
-	public static List<Class> getRemoteServiceClass(){
+	public static List<Class<?>> getRemoteServiceClass(){
 		
 		return SERVERINTERFACES;
 	}
@@ -61,9 +61,9 @@ public class RpcClientFinder {
     private static void initInterfaceClazz(){
     	 if(!CollectionUtils.isEmpty(INTERFACECLASS_JARFILE)){
          	for(File file:INTERFACECLASS_JARFILE){
-         		
+         		JarFile jarPath = null;
          		try {
- 					JarFile jarPath = new JarFile(file);
+ 					 jarPath = new JarFile(file);
  					
  					Enumeration<JarEntry> entries = jarPath.entries();
  					if(null!=entries){
@@ -74,7 +74,7 @@ public class RpcClientFinder {
  								String clazzName = jarFileName.replace("/",".") ;
  								try {
  									clazzName = clazzName.substring(0,clazzName.indexOf(".class"));
- 									Class clazz = Class.forName(clazzName);
+ 									Class<?> clazz = Class.forName(clazzName);
  									if(clazz.isAnnotationPresent(MarmotInterface.class)){
  										INTERFACECLASS.add(clazz);
  									}
@@ -89,6 +89,12 @@ public class RpcClientFinder {
  					
  				} catch (IOException e) {
  					e.printStackTrace();
+ 				}finally{
+ 					try {
+						jarPath.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
  				}
          	}
          }
@@ -110,7 +116,7 @@ public class RpcClientFinder {
 								String clazzName = jarFileName.replace("/",".") ;
 								try {
 									clazzName = clazzName.substring(0,clazzName.indexOf(".class"));
-									Class clazz = Class.forName(clazzName);
+									Class<?> clazz = Class.forName(clazzName);
 									if(clazz.isAnnotationPresent(MarmotInterface.class)){
 										INTERFACECLASS.add(clazz);
 									}
@@ -129,7 +135,6 @@ public class RpcClientFinder {
 					try {
 						jarPath.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

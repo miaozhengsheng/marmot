@@ -60,12 +60,16 @@ public class NioServer {
 		
 		System.out.println("开始停止服务。。。");
 		try {
-			selector.close();
+			if(selector!=null){
+				selector.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			serverSocketChannel.close();
+			if(serverSocketChannel!=null){
+				serverSocketChannel.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

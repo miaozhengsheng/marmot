@@ -1,9 +1,11 @@
 package com.marmot.framework;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContextEvent;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoaderListener;
 
 import com.marmot.common.nioserver.NioServer;
@@ -21,6 +23,8 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		super.contextInitialized(event);
 		// 初始化 本地服务和远程服务信息
 		RpcClientFinder.getInstance().load();
+		// 校验提供的rpc是否都已经实现 如果存在未实现的rpc接口 怎不能发布
+		validateRpcService();
 		// 如果项目提供了RPC服务 需要将项目注册到ZK上
 		IZKClient client = ZKUtil.getZkClient();
 		client.createNode(EnumZKNameSpace.PUBLIC,
@@ -41,5 +45,24 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 
 		NioServer.stopServer();
 	}
+	
+	private void validateRpcService() throws RuntimeException{
+		if(RpcClientFinder.getLocalServiceClass().isEmpty()){
+			return;
+		}
+		
+		List<Class<?>> localServiceClass = RpcClientFinder.getLocalServiceClass();
+		
+		for(Class<?> clazz:localServiceClass){
+			try {
+				getCurrentWebApplicationContext().getBean(clazz);
+			} catch (NoSuchBeanDefinitionException e) {
+				throw new RuntimeException("提供的rpc服务"+clazz.getName()+" 未找打对应的实现，请确认");
+			}
+			
+			
+		}
+	}
+	
 
 }
