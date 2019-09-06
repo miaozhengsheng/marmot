@@ -10,6 +10,7 @@ import org.springframework.web.context.ContextLoaderListener;
 
 import com.marmot.common.nioserver.NioServer;
 import com.marmot.common.rpc.scanner.RpcClientFinder;
+import com.marmot.common.system.SystemUtil;
 import com.marmot.common.util.PropUtil;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
@@ -25,18 +26,25 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		RpcClientFinder.getInstance().load();
 		// 校验提供的rpc是否都已经实现 如果存在未实现的rpc接口 怎不能发布
 		validateRpcService();
-		// 如果项目提供了RPC服务 需要将项目注册到ZK上
-		IZKClient client = ZKUtil.getZkClient();
-		client.createNode(EnumZKNameSpace.PUBLIC,
-				ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")));
-		// 在端口上启用NIO服务
-		try {
-			NioServer.startServer(7777);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		// 如果提供了远程服务 需要将服务的ip和端口注册到zk上
+		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
+		    // 将当前的IP注册到ZK服务器上
+			String port = PropUtil.getInstance().get("rpc-port");
+			String ip = SystemUtil.getLocalIp();
+			ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
+			+port));
+		
+			// 在端口上启用NIO服务
+			try {
+				
+				NioServer.startServer(Integer.valueOf(port));
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+	
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class RpcCallHandler implements InvocationHandler{
 
 		// 查询zk上该项目注册的服务
 		
-		List<String> listSubNodes = ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PUBLIC,ZKConstants.getProjectRpcNode(projectName));
+		List<String> listSubNodes = ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(projectName));
 			
 		if(listSubNodes==null||listSubNodes.isEmpty()){
 			throw new Exception("无可用的节点");
