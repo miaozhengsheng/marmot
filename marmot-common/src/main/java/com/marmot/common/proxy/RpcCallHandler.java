@@ -37,11 +37,6 @@ public class RpcCallHandler implements InvocationHandler{
 		String ip = split[0];
 		int port = Integer.parseInt(split[1]);
 		
-		System.out.println("注册的服务的IP为："+ip+" 端口为:"+port);
-		
-		//进行RPC调用
-		
-		
 		NioRemoteCallProcessor callProcessor = new NioRemoteCallProcessor(method.getName(),method.getDeclaringClass().getName(), args);
 		
 		return callProcessor.callRemote(ip, port);

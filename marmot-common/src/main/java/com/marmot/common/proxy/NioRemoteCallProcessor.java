@@ -33,7 +33,7 @@ public class NioRemoteCallProcessor {
 
 	public Object callRemote(String ip, int port) throws IOException {
 
-		Class[] paramterTypes = null;
+		Class<?>[] paramterTypes = null;
 
 		if (paramterValues != null) {
 
