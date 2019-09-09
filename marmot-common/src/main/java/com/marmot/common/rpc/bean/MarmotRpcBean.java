@@ -19,9 +19,9 @@ public class MarmotRpcBean implements Serializable{
 	
 	private Object[] paramterValues; 
 	
-	private Class[] parameterTypes;
+	private Class<?>[] parameterTypes;
 
-	public MarmotRpcBean(String methodName,String clazzName,Object[] paramterValues,Class[] parameterTypes) {
+	public MarmotRpcBean(String methodName,String clazzName,Object[] paramterValues,Class<?>[] parameterTypes) {
 		this.methodName = methodName;
 		this.paramterValues = paramterValues;
 		this.clazzName = clazzName;
@@ -30,13 +30,13 @@ public class MarmotRpcBean implements Serializable{
 
 
 	
-	public Class[] getParameterTypes() {
+	public Class<?>[] getParameterTypes() {
 		return parameterTypes;
 	}
 
 
 
-	public void setParameterTypes(Class[] parameterTypes) {
+	public void setParameterTypes(Class<?>[] parameterTypes) {
 		this.parameterTypes = parameterTypes;
 	}
 
