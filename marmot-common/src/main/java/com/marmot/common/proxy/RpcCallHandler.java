@@ -3,26 +3,46 @@ package com.marmot.common.proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
+import org.springframework.util.CollectionUtils;
 
-import com.marmot.common.util.PropUtil;
+import com.marmot.common.rpc.scanner.RpcClientFinder;
 import com.marmot.common.zk.EnumZKNameSpace;
 import com.marmot.common.zk.ZKConstants;
 import com.marmot.common.zk.ZKUtil;
 
 public class RpcCallHandler implements InvocationHandler{
 
+	
+	private static final Map<String, List<String>> SERVER_NODE_LIST = new ConcurrentHashMap<String, List<String>>();
+	
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		
-		// 获取方法所在的工程的名称
-		String projectName = PropUtil.getInstance().get("project-name");
+		Class<?> clazz = method.getDeclaringClass();
+		
+		String remoteClient = RpcClientFinder.getRemoteClient(clazz);
+		
+		if(StringUtils.isBlank(remoteClient)){
+			throw new Exception("调用的服务不存在");
+		}
 
 		// 查询zk上该项目注册的服务
 		
-		List<String> listSubNodes = ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(projectName));
+		List<String> listSubNodes = SERVER_NODE_LIST.get(remoteClient);
+		if(CollectionUtils.isEmpty(listSubNodes)){		
+			if(ZKUtil.getZkClient().exists(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient))){
+				listSubNodes =	ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient));
+			}
+			if(!CollectionUtils.isEmpty(listSubNodes)){
+				SERVER_NODE_LIST.put(remoteClient, listSubNodes);
+			}
+		}
 			
 		if(listSubNodes==null||listSubNodes.isEmpty()){
 			throw new Exception("无可用的节点");

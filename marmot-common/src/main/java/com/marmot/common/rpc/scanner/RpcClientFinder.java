@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -22,19 +24,18 @@ public class RpcClientFinder {
 	// 提供的服务
 	private static final List<Class<?>> INTERFACECLASS = new ArrayList<Class<?>>();
 	private static final List<File> INTERFACECLASS_JARFILE = new ArrayList<File>();
-	// 需要调用的服务
-	public static final List<Class<?>> SERVERINTERFACES = new ArrayList<Class<?>>();
-	private static final List<File> SERVERINTERFACES_JARFILE = new ArrayList<File>();
+
+	private static final Map<Class<?>, String> REMOTE_INFO = new HashMap<Class<?>,String>();
 	
+	// 更具远程服务的名称 获取工程名称
+	public static String getRemoteClient(Class<?> clazz){
+		return REMOTE_INFO.get(clazz);
+	}
 	
 	public static List<Class<?>> getLocalServiceClass(){
 		return INTERFACECLASS;
 	}
 	
-	public static List<Class<?>> getRemoteServiceClass(){
-		
-		return SERVERINTERFACES;
-	}
 	
 	private RpcClientFinder() {
 
@@ -48,14 +49,17 @@ public class RpcClientFinder {
      * 加载lib包下的所有客户端jar
      */
     public void load() {
-        if (loadLib() == 0) {
-            loadClassPath();
+    	
+    	List<File> remoteClientFiles = loadLib();
+    	
+        if (CollectionUtils.isEmpty(remoteClientFiles)) {
+        	remoteClientFiles =  loadClassPath();
         }
 
         // 本地要提供的服务
        initInterfaceClazz();
        // 有可能需要调用到的服务
-       initRpcInterfaceClazz();
+       initRpcInterfaceClazz(remoteClientFiles);
     }
     
     private static void initInterfaceClazz(){
@@ -64,7 +68,7 @@ public class RpcClientFinder {
          		JarFile jarPath = null;
          		try {
  					 jarPath = new JarFile(file);
- 					
+ 					System.out.println(jarPath.getName());
  					Enumeration<JarEntry> entries = jarPath.entries();
  					if(null!=entries){
  						while(entries.hasMoreElements()){
@@ -100,12 +104,18 @@ public class RpcClientFinder {
          }
     }
     
-    private static void initRpcInterfaceClazz(){
-   	 if(!CollectionUtils.isEmpty(SERVERINTERFACES_JARFILE)){
-        	for(File file:SERVERINTERFACES_JARFILE){
+    private static void initRpcInterfaceClazz(List<File> remoteClientFiles){
+   	 if(!CollectionUtils.isEmpty(remoteClientFiles)){
+        	for(File file:remoteClientFiles){
         		JarFile jarPath = null;
         		try {
 					jarPath = new JarFile(file);
+					String fullPath = jarPath.getName();
+					System.out.println("远程客户端："+fullPath);
+					String fileName = fullPath.substring(fullPath.lastIndexOf("\\")+1);
+					
+					String projectName = fileName.substring(0,fileName.indexOf("-client"));
+					System.out.println("远程客户端的项目名称为:"+projectName);
 					
 					Enumeration<JarEntry> entries = jarPath.entries();
 					if(null!=entries){
@@ -118,7 +128,7 @@ public class RpcClientFinder {
 									clazzName = clazzName.substring(0,clazzName.indexOf(".class"));
 									Class<?> clazz = Class.forName(clazzName);
 									if(clazz.isAnnotationPresent(MarmotInterface.class)){
-										INTERFACECLASS.add(clazz);
+										REMOTE_INFO.put(clazz, projectName);
 									}
 									
 								} catch (ClassNotFoundException e) {
@@ -142,7 +152,9 @@ public class RpcClientFinder {
         }
    }
     
-    private int loadLib() {
+    private List<File> loadLib() {
+    	List<File> remoteClientFiles = new ArrayList<File>();
+    	
         URL location = RpcClientFinder.class.getProtectionDomain().getCodeSource().getLocation();
         String filePath = location.getPath();
         if (filePath.endsWith(".jar")) {
@@ -160,16 +172,16 @@ public class RpcClientFinder {
                 return false;
             }
         });
-        int loadCnt = 0;
         if (listFiles != null) {
             for (File jarFile : listFiles) {
                 boolean include = include(jarFile);
                 if (include) {
                 	String fileName = jarFile.getName();
-                	if(fileName.substring(0,fileName.indexOf("-client")).equals(PropUtil.getInstance().get("project-name"))){
+                	fileName = fileName.substring(0,fileName.indexOf("-client"));
+                	if(fileName.equals(PropUtil.getInstance().get("project-name"))){
                 		INTERFACECLASS_JARFILE.add(jarFile);
-                	}else{
-                		SERVERINTERFACES_JARFILE.add(jarFile);
+                	}else if(fileName.startsWith("marmot")){
+                		remoteClientFiles.add(jarFile);
                 	}
                 	System.out.println(jarFile.getName());
                     System.out.println("ServiceMetadataManager include jar: " + jarFile);
@@ -177,10 +189,9 @@ public class RpcClientFinder {
                 	 System.out.println("ServiceMetadataManager try inclue jar: " + jarFile
                             + ", because did not find the ServiceMetadata and ingore");
                 }
-                loadCnt++;
             }
         }
-        return loadCnt;
+        return remoteClientFiles;
     }
     
     
@@ -199,7 +210,10 @@ public class RpcClientFinder {
         return false;
     }
     
-    private void loadClassPath() {
+    private List<File> loadClassPath() {
+    	
+    	List<File> remoteClientFiles = new ArrayList<File>();
+    	
         String paths = System.getProperty("java.class.path");
         String[] array = paths.split("\\" + File.pathSeparator);
         for (String path : array) {
@@ -210,8 +224,8 @@ public class RpcClientFinder {
                 	String fileName = jarFile.getName();
                 	if(fileName.substring(0,fileName.indexOf("-client")).equals(PropUtil.getInstance().get("project-name"))){
                 		INTERFACECLASS_JARFILE.add(jarFile);
-                	}else{
-                		SERVERINTERFACES_JARFILE.add(jarFile);
+                	}else if(fileName.endsWith("-client")&&fileName.startsWith("-marmot")){
+                		remoteClientFiles.add(jarFile);
                 	}
                 } else {
                 	System.out.println("ServiceMetadataManager try inclue jar: " + jarFile
@@ -219,6 +233,8 @@ public class RpcClientFinder {
                 }
             }
         }
+        
+        return remoteClientFiles;
     }
     
     public boolean include(File jarFile) {
