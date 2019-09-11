@@ -35,8 +35,6 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 	@Override
 	public void destroy() {
 		super.destroy();
-		System.out.println("服务停止中。。。。。");
-		// 删除注册到ZK上的服务节点
 		ZKUtil.getZkClient().deleteNormalNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project"));
 	}
 

@@ -21,19 +21,14 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
-		// ³õÊ¼»¯ ±¾µØ·şÎñºÍÔ¶³Ì·şÎñĞÅÏ¢
 		RpcClientFinder.getInstance().load();
-		// Ğ£ÑéÌá¹©µÄrpcÊÇ·ñ¶¼ÒÑ¾­ÊµÏÖ Èç¹û´æÔÚÎ´ÊµÏÖµÄrpc½Ó¿Ú Ôõ²»ÄÜ·¢²¼
 		validateRpcService();
-		// Èç¹ûÌá¹©ÁËÔ¶³Ì·şÎñ ĞèÒª½«·şÎñµÄipºÍ¶Ë¿Ú×¢²áµ½zkÉÏ
 		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
-		    // ½«µ±Ç°µÄIP×¢²áµ½ZK·şÎñÆ÷ÉÏ
 			String port = PropUtil.getInstance().get("rpc-port");
 			String ip = SystemUtil.getLocalIp();
 			ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
 			+port));
 		
-			// ÔÚ¶Ë¿ÚÉÏÆôÓÃNIO·şÎñ
 			try {
 				
 				NioServer.startServer(Integer.valueOf(port));
@@ -64,7 +59,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 			try {
 				getCurrentWebApplicationContext().getBean(clazz);
 			} catch (NoSuchBeanDefinitionException e) {
-				throw new RuntimeException("Ìá¹©µÄrpc·şÎñ"+clazz.getName()+" Î´ÕÒ´ò¶ÔÓ¦µÄÊµÏÖ£¬ÇëÈ·ÈÏ");
+				throw new RuntimeException("ï¿½á¹©ï¿½ï¿½rpcï¿½ï¿½ï¿½ï¿½"+clazz.getName()+" Î´ï¿½Ò´ï¿½ï¿½Ó¦ï¿½ï¿½Êµï¿½Ö£ï¿½ï¿½ï¿½È·ï¿½ï¿½");
 			}
 			
 			

@@ -1,4 +1,4 @@
-package com.marmot.demo.service.impl;
+package com.marmot.server.service;
 
 import org.springframework.stereotype.Service;
 

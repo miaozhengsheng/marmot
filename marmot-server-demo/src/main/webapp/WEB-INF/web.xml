@@ -4,17 +4,16 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-  
   <context-param>
   	<param-name> contextConfigLocation</param-name>
   	<param-value>classpath*:applicationContext-*.xml</param-value>
   </context-param>
   
-  <listener>
+    <listener>
   	<listener-class>com.marmot.framework.MarmotContextLoaderListener</listener-class>
   </listener>
   
-   <servlet>
+     <servlet>
   	<servlet-class>com.marmot.framework.MarmotDiaptcherServlet</servlet-class>
   	<servlet-name>DispatcherServlet</servlet-name>
 	  	<init-param>
@@ -29,5 +28,4 @@
   	<servlet-name>DispatcherServlet</servlet-name>
   	<url-pattern>/</url-pattern>
   </servlet-mapping>
-  
 </web-app>
