@@ -1,0 +1,31 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+    <context-param>
+  	<param-name> contextConfigLocation</param-name>
+  	<param-value>classpath*:applicationContext-*.xml</param-value>
+  </context-param>
+  
+    <listener>
+  	<listener-class>com.marmot.framework.MarmotContextLoaderListener</listener-class>
+  </listener>
+  
+     <servlet>
+  	<servlet-class>com.marmot.framework.MarmotDiaptcherServlet</servlet-class>
+  	<servlet-name>DispatcherServlet</servlet-name>
+	  	<init-param>
+	  		<param-name>contextConfigLocation</param-name>
+	  		<param-value>classpath*:springmvc.xml</param-value>
+	  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  	<description>framework</description>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>DispatcherServlet</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
