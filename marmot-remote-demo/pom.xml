@@ -64,24 +64,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<plugin> 
-			  <groupId>org.apache.maven.plugins</groupId>  
-			  <artifactId>maven-dependency-plugin</artifactId>  
-			  <executions> 
-			    <execution> 
-			      <phase>clean</phase>  
-			      <goals> 
-			        <goal>copy-dependencies</goal> 
-			      </goals>  
-			      <configuration> 
-			        <outputDirectory>src/main/webapp/WEB-INF/lib</outputDirectory>  
-			        <overWriteReleases>false</overWriteReleases>  
-			        <overWriteSnapshots>false</overWriteSnapshots>  
-			        <overWriteIfNewer>true</overWriteIfNewer> 
-			      </configuration> 
-			    </execution> 
-			  </executions> 
-			</plugin>
+			
 			</plugins>
 		</build>
 </project>
