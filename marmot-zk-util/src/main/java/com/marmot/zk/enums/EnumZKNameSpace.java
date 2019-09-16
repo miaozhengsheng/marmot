@@ -1,4 +1,4 @@
-package com.marmot.common.zk;
+package com.marmot.zk.enums;
 
 public enum EnumZKNameSpace {
 	

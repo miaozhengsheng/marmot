@@ -11,9 +11,9 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.util.CollectionUtils;
 
 import com.marmot.common.rpc.scanner.RpcClientFinder;
-import com.marmot.common.zk.EnumZKNameSpace;
-import com.marmot.common.zk.ZKConstants;
-import com.marmot.common.zk.ZKUtil;
+import com.marmot.zk.constants.ZKConstants;
+import com.marmot.zk.enums.EnumZKNameSpace;
+import com.marmot.zk.utils.ZookeeperFactory;
 
 public class RpcCallHandler implements InvocationHandler{
 
@@ -36,8 +36,8 @@ public class RpcCallHandler implements InvocationHandler{
 		
 		List<String> listSubNodes = SERVER_NODE_LIST.get(remoteClient);
 		if(CollectionUtils.isEmpty(listSubNodes)){		
-			if(ZKUtil.getZkClient().exists(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient))){
-				listSubNodes =	ZKUtil.getZkClient().listSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient));
+			if(ZookeeperFactory.useDefaultZookeeper().exist(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient))){
+				listSubNodes =	ZookeeperFactory.useDefaultZookeeper().getSubNodes(EnumZKNameSpace.PROJECT,ZKConstants.getProjectRpcNode(remoteClient));
 			}
 			if(!CollectionUtils.isEmpty(listSubNodes)){
 				SERVER_NODE_LIST.put(remoteClient, listSubNodes);

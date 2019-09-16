@@ -12,9 +12,10 @@ import com.marmot.common.nioserver.NioServer;
 import com.marmot.common.rpc.scanner.RpcClientFinder;
 import com.marmot.common.system.SystemUtil;
 import com.marmot.common.util.PropUtil;
-import com.marmot.common.zk.EnumZKNameSpace;
-import com.marmot.common.zk.ZKConstants;
-import com.marmot.common.zk.ZKUtil;
+import com.marmot.zk.client.exception.ZookeeperException;
+import com.marmot.zk.constants.ZKConstants;
+import com.marmot.zk.enums.EnumZKNameSpace;
+import com.marmot.zk.utils.ZookeeperFactory;
 
 public class MarmotContextLoaderListener extends ContextLoaderListener {
 
@@ -26,8 +27,12 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
 			String port = PropUtil.getInstance().get("rpc-port");
 			String ip = SystemUtil.getLocalIp();
-			ZKUtil.getZkClient().setTempNodeData(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
-			+port));
+			try {
+				ZookeeperFactory.useDefaultZookeeper().addNode(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
+				+port));
+			} catch (ZookeeperException e1) {
+				e1.printStackTrace();
+			}
 		
 			try {
 				
@@ -40,6 +45,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		}
 	
 	}
+	
 
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {

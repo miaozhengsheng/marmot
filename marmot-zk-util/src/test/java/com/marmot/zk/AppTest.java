@@ -1,12 +1,4 @@
-package com.marmot.common;
-
-import java.util.List;
-
-import org.apache.commons.lang.math.RandomUtils;
-
-import com.marmot.common.zk.EnumZKNameSpace;
-import com.marmot.common.zk.ZKConstants;
-import com.marmot.common.zk.ZKUtil;
+package com.marmot.zk;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -43,6 +35,4 @@ public class AppTest
     {
         assertTrue( true );
     }
-    
-    
 }

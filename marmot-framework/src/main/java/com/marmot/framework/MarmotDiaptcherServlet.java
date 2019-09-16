@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.marmot.common.zk.EnumZKNameSpace;
-import com.marmot.common.zk.ZKConstants;
-import com.marmot.common.zk.ZKUtil;
+import com.marmot.zk.client.exception.ZookeeperException;
+import com.marmot.zk.constants.ZKConstants;
+import com.marmot.zk.enums.EnumZKNameSpace;
+import com.marmot.zk.utils.ZookeeperFactory;
+
 
 public class MarmotDiaptcherServlet extends DispatcherServlet{
 
@@ -35,7 +37,11 @@ public class MarmotDiaptcherServlet extends DispatcherServlet{
 	@Override
 	public void destroy() {
 		super.destroy();
-		ZKUtil.getZkClient().deleteNormalNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project"));
+		try {
+			ZookeeperFactory.useDefaultZookeeper().deleteNode(EnumZKNameSpace.PUBLIC, ZKConstants.getProjectRpcNode("base-project"));
+		} catch (ZookeeperException e) {
+			e.printStackTrace();
+		}
 	}
 
 
