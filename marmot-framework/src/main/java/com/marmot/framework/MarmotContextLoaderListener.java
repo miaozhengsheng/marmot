@@ -50,8 +50,19 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		super.contextDestroyed(event);
-
-		NioServer.stopServer();
+		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
+			NioServer.stopServer();
+			String port = PropUtil.getInstance().get("rpc-port");
+			String ip = SystemUtil.getLocalIp();
+			try {
+				// 删除rpc节点
+				ZookeeperFactory.useDefaultZookeeper().deleteNode(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
+						+port));
+			} catch (ZookeeperException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void validateRpcService() throws RuntimeException{
