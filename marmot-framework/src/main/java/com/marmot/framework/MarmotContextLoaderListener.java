@@ -26,7 +26,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		validateRpcService();
 		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
 			String port = PropUtil.getInstance().get("rpc-port");
-			String ip = SystemUtil.getLocalIp();
+			String ip = SystemUtil.getInNetworkIp();
 			try {
 				ZookeeperFactory.useDefaultZookeeper().addNode(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
 				+port));
@@ -53,7 +53,7 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 		if(!RpcClientFinder.getLocalServiceClass().isEmpty()){
 			NioServer.stopServer();
 			String port = PropUtil.getInstance().get("rpc-port");
-			String ip = SystemUtil.getLocalIp();
+			String ip = SystemUtil.getInNetworkIp();
 			try {
 				// 删除rpc节点
 				ZookeeperFactory.useDefaultZookeeper().deleteNode(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"

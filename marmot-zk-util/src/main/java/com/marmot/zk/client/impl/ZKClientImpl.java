@@ -117,15 +117,6 @@ public class ZKClientImpl implements IZKClient {
         return Operation4internal.addNode(client, fullPath, CreateMode.EPHEMERAL);
     }
 
-    public static void main(String[] args) {
-    	try {
-    			System.setProperty("SystemRuntimeEnvironment", "online");
-			ZookeeperFactory.useDefaultZookeeper().addTempNode(EnumZKNameSpace.PROJECT,"test/127.0.0.1:8989");
-		} catch (ZookeeperException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
     
     @Override
     public boolean addNode(EnumZKNameSpace namespace, String path) throws ZookeeperException {

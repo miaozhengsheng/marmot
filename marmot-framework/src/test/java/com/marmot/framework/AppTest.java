@@ -1,5 +1,11 @@
 package com.marmot.framework;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -34,5 +40,25 @@ public class AppTest
     public void testApp()
     {
         assertTrue( true );
+    }
+    
+    public static void main(String[] args) {
+        ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+        Method[] methods = TestParamteraNameInterfaceImpl.class.getMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            String[] paramterNames = parameterNameDiscoverer.getParameterNames(methods[i]);
+            
+            System.out.println(methods[i].getName());
+            
+            Parameter[] parameters = methods[i].getParameters();
+            if(null!=paramterNames){
+            	for(int j=0;j<paramterNames.length;j++){
+            		System.out.println(paramterNames[j]);
+            	}
+            }
+            
+            System.out.println("********************************");
+        }
     }
 }
