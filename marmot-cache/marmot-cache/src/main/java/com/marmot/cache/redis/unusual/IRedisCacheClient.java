@@ -333,7 +333,7 @@ public interface IRedisCacheClient  extends ICacheClientWithException {
      * 将一个或多个 member 元素及其 score 值加入到有序集 key 当中
      * 
      * @deprecated starting from version 1.3.5 this method will not be exposed.
-     * @see {@link com.liepin.cache.redis.IRedisCacheClient#sortSetZadd2()}
+     * @see {@link che.redis.IRedisCacheClient#sortSetZadd2()}
      */
     public long sortSetZadd(String key, Map<Double, String> scoreMembers) throws CacheException;
 

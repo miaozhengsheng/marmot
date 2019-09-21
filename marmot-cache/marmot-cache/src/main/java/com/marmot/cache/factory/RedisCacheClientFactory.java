@@ -52,7 +52,7 @@ public class RedisCacheClientFactory implements ICachedClientFactory {
     static {
         // 停止时就不初始化心跳上报处理器
         StackTraceElement[] stes = Thread.currentThread().getStackTrace();
-        if (!stes[2].getClassName().startsWith("com.liepin.swift.framework.SwiftApplicationContext")) {
+        if (!stes[2].getClassName().startsWith(".framework.SwiftApplicationContext")) {
             RedisSentinel.getInstance().listen(heartbeatReporting = new HeartbeatReportingImpl());
         }
     }
