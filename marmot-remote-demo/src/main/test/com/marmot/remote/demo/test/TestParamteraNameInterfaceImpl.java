@@ -1,4 +1,4 @@
-package com.marmot.framework;
+package com.marmot.remote.demo.test;
 
 public class TestParamteraNameInterfaceImpl implements ITestParamterNameInterface{
 
