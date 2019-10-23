@@ -1,14 +1,17 @@
 package com.marmot.framework;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContextEvent;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.WebApplicationContext;
 
+import com.marmot.common.component.IMarmotComponent;
 import com.marmot.common.nioserver.NioServer;
 import com.marmot.common.rpc.scanner.RpcClientFinder;
 import com.marmot.common.system.SystemUtil;
@@ -44,8 +47,32 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 				e.printStackTrace();
 			}
 		}
+		
+		// 启动框架的其他模块
+		
+		initFrameworkCompnent();
+		
 	}
 	
+
+	private void initFrameworkCompnent() {
+		Map<String, IMarmotComponent> beansOfType = super.getCurrentWebApplicationContext().getBeansOfType(IMarmotComponent.class);
+		
+		if(beansOfType==null||beansOfType.isEmpty()){
+			return;
+		}
+		
+		Iterator<Entry<String, IMarmotComponent>> iterator = beansOfType.entrySet().iterator();
+		
+		while(iterator.hasNext()){
+			
+			Entry<String, IMarmotComponent> next = iterator.next();
+			
+			next.getValue().initComponent(super.getCurrentWebApplicationContext());
+			
+		}
+	}
+
 
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
