@@ -1,5 +1,7 @@
 package com.marmot.common.framework;
 
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -22,6 +24,7 @@ public class SpringContextUtil implements ApplicationContextAware{
                 SpringContextUtil.applicationContext = applicationContext;
             }
         }
+		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -32,5 +35,10 @@ public class SpringContextUtil implements ApplicationContextAware{
 	
 	public static <T> T getBean(Class<T> clazz){
 		return (T)applicationContext.getBean(clazz);
+	}
+	
+	public static <T>  Map<String, T> getBeansByType(Class<T> clazz){
+		
+		return applicationContext.getBeansOfType(clazz);
 	}
 }

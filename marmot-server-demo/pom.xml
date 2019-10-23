@@ -33,6 +33,12 @@
     	<artifactId>marmot-demo-client</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     </dependency>
+    
+    <dependency>
+    	<groupId>com.marmot</groupId>
+		<artifactId>com.marmot.kafka</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.marmot.common.nioserver.NioServer;
 import com.marmot.common.rpc.scanner.RpcClientFinder;
@@ -43,7 +44,6 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 				e.printStackTrace();
 			}
 		}
-	
 	}
 	
 
@@ -59,7 +59,6 @@ public class MarmotContextLoaderListener extends ContextLoaderListener {
 				ZookeeperFactory.useDefaultZookeeper().deleteNode(EnumZKNameSpace.PROJECT, ZKConstants.getProjectRpcNode(PropUtil.getInstance().get("project-name")+"/"+ip+":"
 						+port));
 			} catch (ZookeeperException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
