@@ -8,7 +8,7 @@ import com.marmot.com.marmot.kafka.topic.IKafkaTopic;
 public class KafKaDemo implements IKafkaTopic{
 
 	@Override
-	public void consume(String message) {
+	public void consumeMessage(String message) {
 		System.out.println("当前消费的消息为:"+message);
 	}
 

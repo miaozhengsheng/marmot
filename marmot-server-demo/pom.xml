@@ -36,7 +36,7 @@
     
     <dependency>
     	<groupId>com.marmot</groupId>
-		<artifactId>com.marmot.kafka</artifactId>
+		<artifactId>marmot-kafka</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
