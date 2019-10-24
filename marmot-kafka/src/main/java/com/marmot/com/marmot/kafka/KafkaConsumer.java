@@ -42,6 +42,7 @@ public class KafkaConsumer implements IMarmotComponent, InitializingBean,
 
 	@Override
 	public void initComponent(ApplicationContext applicationContext) {
+		
 		Map<String, IKafkaTopic> beansByType = applicationContext
 				.getBeansOfType(IKafkaTopic.class);
 
