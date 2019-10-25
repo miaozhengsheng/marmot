@@ -6,4 +6,5 @@ public interface IMarmotComponent {
 
 	
 	public void initComponent(ApplicationContext applicationContext);
+	
 }
