@@ -19,6 +19,8 @@ import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.serializer.StringDecoder;
 import kafka.utils.VerifiableProperties;
 
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +28,10 @@ import org.springframework.stereotype.Component;
 
 import com.marmot.com.marmot.kafka.topic.IKafkaTopic;
 import com.marmot.common.component.IMarmotComponent;
+import com.marmot.common.conf.ClientUtil;
+import com.marmot.common.log.BusinessLog;
+import com.marmot.common.system.SystemUtil;
+import com.marmot.common.util.PropUtil;
 
 @Component
 public class KafkaConsumer implements IMarmotComponent, InitializingBean,
@@ -58,12 +64,13 @@ public class KafkaConsumer implements IMarmotComponent, InitializingBean,
 		
 		while (iterator.hasNext()) {
 
+			
 			Entry<String, IKafkaTopic> next = iterator.next();
 
 			String topic = next.getKey();
 
 			topic = topic.substring(topic.indexOf("KAFKA.TOPIC.") + 12);
-
+			
 			service.submit(new KafKaExecutor(next.getValue(), topic));
 		}
 	}
@@ -81,8 +88,6 @@ public class KafkaConsumer implements IMarmotComponent, InitializingBean,
 
 		@Override
 		public Void call() throws Exception {
-			
-			System.out.println("需要订阅的TOPIC:" + topic);
 			
 			Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
 			topicCountMap.put(topic, new Integer(1));
@@ -116,8 +121,7 @@ public class KafkaConsumer implements IMarmotComponent, InitializingBean,
 		// zookeeper 配置
 		props.put("zookeeper.connect", "192.168.117.130:2181,192.168.117.131:2181,192.168.117.132:2181");
 
-		// group 代表一个消费组
-		props.put("group.id", "jd-group");
+		props.put("group.id", ClientUtil.getProjectName());
 
 		// zk连接超时
 		props.put("zookeeper.session.timeout.ms", "4000");

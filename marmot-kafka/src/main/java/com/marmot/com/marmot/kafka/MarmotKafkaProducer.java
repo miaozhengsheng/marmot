@@ -24,7 +24,7 @@ public class MarmotKafkaProducer implements IMarmotKafkaProducer,InitializingBea
 		producer.flush();
 		return false;
 	}
-
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		Properties properties = new Properties();

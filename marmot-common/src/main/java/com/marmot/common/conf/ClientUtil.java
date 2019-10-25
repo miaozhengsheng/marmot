@@ -36,7 +36,7 @@ public class ClientUtil {
     /**
      * zookeeper节点名称
      */
-    private static final String NODE_NAME = "common/clientIdInfo";
+    private static final String NODE_NAME = "/common/clientIdInfo";
 
     /**
      * client_id => project_name 缓存
@@ -118,7 +118,7 @@ public class ClientUtil {
 
             @Override
             public String listeningPath() {
-                return EnumZKNameSpace.PUBLIC.getNamespace() + "/" + NODE_NAME;
+                return EnumZKNameSpace.PUBLIC.getNamespace() + NODE_NAME;
             }
 
 			@Override
