@@ -13,4 +13,14 @@ public class MarmotBaseCompnent implements IMarmotComponent{
 		
 	}
 
+	@Override
+	public void distory(ApplicationContext applicationContext) {
+		
+	}
+
+	@Override
+	public int order() {
+		return 1;
+	}
+
 }

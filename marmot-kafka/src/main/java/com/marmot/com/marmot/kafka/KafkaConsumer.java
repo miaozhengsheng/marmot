@@ -19,8 +19,7 @@ import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.serializer.StringDecoder;
 import kafka.utils.VerifiableProperties;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -29,15 +28,19 @@ import com.marmot.common.component.IMarmotComponent;
 import com.marmot.common.conf.ClientUtil;
 
 @Component
-public class KafkaConsumer implements IMarmotComponent, DisposableBean {
+public class KafkaConsumer implements IMarmotComponent {
 
 	private ExecutorService service = null;
 
 	private static  ConsumerConnector connector ;
+	
+	private static final Logger logger = Logger.getLogger(KafkaConsumer.class);
 
 	@Override
 	public void initComponent(ApplicationContext applicationContext) {
 
+		logger.debug("spring 上下文启动成功，开始初始化kafka消费节点");
+		
 		Map<String, IKafkaTopic> beansByType = applicationContext
 				.getBeansOfType(IKafkaTopic.class);
 
@@ -126,9 +129,22 @@ public class KafkaConsumer implements IMarmotComponent, DisposableBean {
 
 	}
 
+
 	@Override
-	public void destroy() throws Exception {
-		service.shutdown();
+	public void distory(ApplicationContext applicationContext) {
+		
+		logger.debug("服务停止，开始清理kafka对应的资源");
+		if(connector!=null){
+			connector.commitOffsets();
+		}
+		if(service!=null){
+			service.shutdown();
+		}
+	}
+
+	@Override
+	public int order() {
+		return 2;
 	}
 
 }

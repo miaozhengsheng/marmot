@@ -7,16 +7,19 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.marmot.com.marmot.kafka.topic.IMarmotKafkaProducer;
+import com.marmot.common.component.IMarmotComponent;
 
 @Service
-public class MarmotKafkaProducer implements IMarmotKafkaProducer,InitializingBean,DisposableBean{
+public class MarmotKafkaProducer implements IMarmotKafkaProducer,IMarmotComponent{
 	
 	private   Producer<String, String> producer = null;
+	
+	  private static final Logger logger = Logger.getLogger(MarmotKafkaProducer.class);
 
 	@Override
 	public boolean sendMsg(String topic, String message) {
@@ -25,8 +28,13 @@ public class MarmotKafkaProducer implements IMarmotKafkaProducer,InitializingBea
 		return false;
 	}
 	
+
+
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void initComponent(ApplicationContext applicationContext) {
+		
+		logger.debug("spring 上下文启动成功，开始初始化kafka生产的节点");
+		
 		Properties properties = new Properties();
         properties.put("bootstrap.servers", "192.168.117.130:9092,192.168.117.131:9092,192.168.117.132:9092");
         properties.put("acks", "all");
@@ -37,12 +45,18 @@ public class MarmotKafkaProducer implements IMarmotKafkaProducer,InitializingBea
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
       
-        producer = new KafkaProducer<String, String>(properties);
+        producer = new KafkaProducer<String, String>(properties);		
 	}
 
 	@Override
-	public void destroy() throws Exception {
-		producer.close();
+	public void distory(ApplicationContext applicationContext) {
+		logger.debug("spring 上下文停止，开始停止 kafka生产客户端..");
 		
+		producer.close();
+	}
+
+	@Override
+	public int order() {
+		return 3;
 	}
 }
